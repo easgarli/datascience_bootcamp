@@ -1,0 +1,6 @@
+salary,skills_ SQL,skills_ Tableau,skills_DL,skills_Django,skills_ML,skills_NLP,skills_Python,skills_React,dept_IT,job_data scientist,job_frontend developer,job_manager,job_recruiter
+180000.0,0,0,0,0,0,0,0,0,False,False,False,True,False
+150000.0,1,1,0,0,0,0,1,0,True,False,False,False,False
+120000.0,0,0,0,0,0,0,0,0,False,False,False,False,True
+170000.0,0,0,1,0,1,1,0,0,True,True,False,False,False
+120000.0,0,0,0,1,0,0,0,1,True,False,True,False,False

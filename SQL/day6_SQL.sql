@@ -165,6 +165,7 @@ SELECT name FROM workers3 WHERE Name ~ '^[JBA](.*)[rt]$'
 
 SELECT name FROM workers3 WHERE Name ~ '^[JBA]' OR Name ~'[rt]$'
 
+<<<<<<< HEAD
 SELECT name FROM workers3 WHERE Name ~ '^[^JBE](.*)[^rt]$'SELECT salary FROM workers2 order by salary desc
 
 SELECT * from workers2 ORDER BY number_of_employees LIMIT 3
@@ -216,3 +217,6 @@ SELECT * from workers2;
 SELECT name from workers2;
 
 SELECT distinct name from workers2;
+=======
+SELECT name FROM workers3 WHERE Name ~ '^[^JBE](.*)[^rt]$'
+>>>>>>> 4afe6d5419de0d89094a8090a2430fe2b3c89d05

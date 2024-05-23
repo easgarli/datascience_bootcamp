@@ -5,6 +5,8 @@ books/
 # *.log
 # *.txt
 
+B250-DataScience-ENG/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

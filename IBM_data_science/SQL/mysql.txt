@@ -1,0 +1,2 @@
+mysql username for cloud: easgarli
+pass: Mjc5MzctZWFzZ2Fy

@@ -1,0 +1,35 @@
+# Python files
+*.pyc
+*.pyo
+__pycache__/
+
+# Python-specific test files
+test*.py
+*_test.py
+test_*.py
+*_tests.py
+
+# Python package files
+.eggs
+.tox
+.coverage
+nosetests.xml
+
+# Python linters
+.pylintrc
+.flake8
+.pep8
+
+# Python IDE settings
+.idea
+.vscode
+
+# Environment variables
+.env
+.env.*
+
+# Virtual environment directories
+venv/
+env/
+.venv/
+

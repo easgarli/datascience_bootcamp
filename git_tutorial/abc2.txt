@@ -1,5 +1,0 @@
-this line was created on main branch
-
-this line was created on elnur branch
-
-this line was again created on main branch

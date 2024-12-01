@@ -1,0 +1,2 @@
+Detected Plate: AB123CD
+Confidence: 0.85

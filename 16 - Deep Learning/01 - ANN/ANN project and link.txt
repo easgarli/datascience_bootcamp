@@ -1,2 +1,0 @@
-ANN Proje veri seti ve link bağlantısı:
-https://www.kaggle.com/datasets/parisrohan/credit-score-classification?select=test.csv

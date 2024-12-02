@@ -1,0 +1,31 @@
+
+### `.gitignore`
+
+Here’s a `.gitignore` file to prevent committing unnecessary files:
+
+```plaintext
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+env/
+venv/
+.venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Streamlit cache
+.streamlit/
+*.db
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs and other temporary files
+*.log
+*.temp
+*.bak

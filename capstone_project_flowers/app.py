@@ -1,68 +1,77 @@
 import streamlit as st
-import tensorflow as tf
 import numpy as np
+import tensorflow as tf
+from tensorflow import keras
 from PIL import Image
-import io
+import cv2
 
-# Load the trained models
-custom_cnn = tf.keras.models.load_model('models/custom_cnn.h5')
-vgg16_model = tf.keras.models.load_model('models/vgg16_model.h5')
-resnet_model = tf.keras.models.load_model('models/resnet_model.h5')
-
-# Class names (update according to your flower classes)
+# Define class names
 class_names = ['daisy', 'dandelion', 'roses', 'sunflowers', 'tulips']
 
+# Load models and wrap in TFSMLayer
+@st.cache_resource
+def load_custom_cnn():
+    return keras.Sequential([
+        keras.layers.TFSMLayer("/home/elnur/Desktop/DataScience-Bootcamp/capstone_project_flowers/custom_cnn_model_savedmodel", call_endpoint="serving_default")
+    ])
+
+@st.cache_resource
+def load_vgg16():
+    return keras.Sequential([
+        keras.layers.TFSMLayer("/home/elnur/Desktop/DataScience-Bootcamp/capstone_project_flowers/VGG16_savedmodel", call_endpoint="serving_default")
+    ])
+
+@st.cache_resource
+def load_resnet152():
+    return keras.Sequential([
+        keras.layers.TFSMLayer("/home/elnur/Desktop/DataScience-Bootcamp/capstone_project_flowers/ResNet152_savedmodel", call_endpoint="serving_default")
+    ])
+
+# Preprocess image
 def preprocess_image(image):
-    """
-    Preprocess the uploaded image
-    """
-    img = image.resize((224, 224))
-    img_array = tf.keras.preprocessing.image.img_to_array(img)
-    img_array = tf.expand_dims(img_array, 0)
-    img_array = img_array / 255.0
-    return img_array
+    image = np.array(image)
+    image = cv2.resize(image, (224, 224))  # Resize to the model's expected input size
+    image = image / 255.0                  # Normalize the image
+    image = np.expand_dims(image, axis=0)  # Add batch dimension
+    return image
 
-def main():
-    st.title("Flower Classification App")
-    st.write("Upload an image of a flower to classify it!")
+# Streamlit App Interface
+st.title("Flower Classification App")
+st.write("Upload an image of a flower, and the model will predict its class.")
 
-    uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+# Model selection
+model_choice = st.selectbox("Choose a model", ("Custom CNN", "VGG16", "ResNet152"))
 
-    if uploaded_file is not None:
-        # Display the uploaded image
-        image = Image.open(uploaded_file)
-        st.image(image, caption='Uploaded Image', use_column_width=True)
+# Load the selected model
+if model_choice == "Custom CNN":
+    model = load_custom_cnn()
+elif model_choice == "VGG16":
+    model = load_vgg16()
+else:
+    model = load_resnet152()
 
-        # Preprocess the image
-        processed_image = preprocess_image(image)
+# File uploader
+uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
-        # Model selection
-        model_choice = st.selectbox(
-            "Choose a model:",
-            ["Custom CNN", "VGG16", "ResNet50"]
-        )
+if uploaded_file is not None:
+    # Display uploaded image
+    image = Image.open(uploaded_file)
+    st.image(image, caption="Uploaded Image", use_column_width=True)
 
-        if st.button("Classify"):
-            # Make prediction based on selected model
-            if model_choice == "Custom CNN":
-                prediction = custom_cnn.predict(processed_image)
-            elif model_choice == "VGG16":
-                prediction = vgg16_model.predict(processed_image)
-            else:
-                prediction = resnet_model.predict(processed_image)
+    # Preprocess and make a prediction
+    processed_image = preprocess_image(image)
+    # Perform inference and get the prediction dictionary
+    prediction = model.predict(processed_image)
 
-            # Get the predicted class
-            predicted_class = class_names[np.argmax(prediction)]
-            confidence = float(np.max(prediction))
+    # Extract the prediction tensor (assuming the output is already a numpy array)
+    confidence_values = list(prediction.values())[0]  # Directly use the array
 
-            # Display results
-            st.write(f"Predicted class: {predicted_class}")
-            st.write(f"Confidence: {confidence:.2%}")
+    # Get the predicted class and confidence
+    predicted_class = class_names[np.argmax(confidence_values)]
+    confidence = np.max(confidence_values)
 
-            # Display prediction probabilities
-            st.write("Prediction Probabilities:")
-            for i, (class_name, prob) in enumerate(zip(class_names, prediction[0])):
-                st.write(f"{class_name}: {prob:.2%}")
+    # Display the prediction and confidence
+    st.write(f"**Prediction:** {predicted_class}")
+    st.write(f"**Confidence:** {confidence:.2f}")
 
-if __name__ == "__main__":
-    main() 
+
